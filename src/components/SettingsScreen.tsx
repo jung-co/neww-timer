@@ -67,18 +67,25 @@ export default function SettingsScreen({ mode, initial, onSave, onClose }: Props
 
   return (
     <div className="settings-screen">
-      <div className="settings-panel">
-        <header className="settings-header">
-          <button type="button" className="icon-btn" aria-label="닫기" onClick={onClose}>
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-            <span>뒤로</span>
-          </button>
-          <h2>{MODE_NAMES[mode]} 시간 설정</h2>
-          <span />
-        </header>
+      <div className="settings-sticky">
+        <div className="settings-sticky-inner">
+          <header className="settings-header">
+            <button type="button" className="icon-btn" aria-label="닫기" onClick={onClose}>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+              <span>뒤로</span>
+            </button>
+            <h2>{MODE_NAMES[mode]} 시간 설정</h2>
+            <button type="button" className="save-btn" onClick={() => onSave(draft)}>
+              저장
+            </button>
+          </header>
+          <div className="settings-summary">{total > 0 ? `총 운동 시간 ${fmt(total)}` : "설정된 시간이 없습니다"}</div>
+        </div>
+      </div>
 
+      <div className="settings-panel">
         <form className="settings-form" autoComplete="off" onSubmit={(e) => e.preventDefault()}>
           {FIELDS[mode].map((f) => (
             <div key={f.key} className="field" data-color={f.color}>
@@ -109,11 +116,6 @@ export default function SettingsScreen({ mode, initial, onSave, onClose }: Props
             </div>
           ))}
         </form>
-
-        <div className="settings-summary">{total > 0 ? `총 운동 시간 ${fmt(total)}` : "설정된 시간이 없습니다"}</div>
-        <button type="button" className="main-btn wide" onClick={() => onSave(draft)}>
-          저장
-        </button>
       </div>
 
       {pickerField && (
