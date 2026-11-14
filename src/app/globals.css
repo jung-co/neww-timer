@@ -418,6 +418,59 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type="number"] { -moz-appearance: textfield; }
 
+/* 휴대폰 가로 화면: 버튼은 하단 바로, 총 시간은 타이머와 하단 바 사이에 작게 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .app {
+    --dock-h: 68px;
+    padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom));
+  }
+
+  .top-bar {
+    padding: max(8px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 4px max(20px, env(safe-area-inset-left));
+  }
+  .icon-btn { padding: 6px 12px; }
+  .mode-tab { padding: 6px 14px; }
+
+  .timer-area { padding: 0 20px; min-height: 0; }
+  .phase-label { font-size: clamp(18px, 6vh, 28px); }
+  .timer { font-size: clamp(56px, 34vh, 220px); margin: 2px 0 4px; }
+  .timer.long { font-size: clamp(48px, 27vh, 180px); }
+  .sub-info { font-size: clamp(14px, 4.5vh, 20px); }
+  .next-info { font-size: 13px; margin-top: 2px; }
+
+  .controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    margin: 0;
+    min-height: calc(var(--dock-h) + env(safe-area-inset-bottom));
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px max(20px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    background: rgba(255, 255, 255, 0.55);
+    border-top: 2px solid #000;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .main-btn { min-width: 160px; padding: 12px 36px; font-size: 18px; }
+  .ghost-btn { font-size: 17px; padding: 12px 16px; opacity: 0.85; }
+
+  .bottom-bar {
+    justify-content: center;
+    gap: 10px;
+    padding: 0 0 8px;
+    background: none;
+    border: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .bottom-label { font-size: 14px; opacity: 0.7; }
+  .bottom-value { font-size: 20px; }
+}
+
 @media (max-width: 640px) {
   .top-bar {
     grid-template-columns: 1fr 1fr;
