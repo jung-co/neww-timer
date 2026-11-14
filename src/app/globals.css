@@ -83,6 +83,7 @@ body[data-phase="done"]      { background: var(--bg-done); }
 }
 .icon-btn:hover { background: rgba(255, 255, 255, 0.85); }
 .icon-btn:active { transform: scale(0.96); }
+.icon-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
 .mode-tabs {
   display: flex;
@@ -131,6 +132,7 @@ body[data-phase="done"]      { background: var(--bg-done); }
   letter-spacing: -0.02em;
   margin: 8px 0 12px;
 }
+.timer.long { font-size: clamp(64px, 16vw, 220px); }
 
 .sub-info {
   font: 700 clamp(18px, 3vw, 26px) var(--mono);
@@ -426,4 +428,5 @@ input[type="number"] { -moz-appearance: textfield; }
   .mode-tabs { grid-area: tabs; justify-self: center; }
   .icon-btn span { display: none; }
   .icon-btn { padding: 9px; }
+  .mode-tab { padding: 8px 12px; font-size: 14px; }
 }

@@ -14,9 +14,25 @@ function load(): { mode: Mode; settings: AllSettings } {
   } catch {
     /* 손상된 값은 무시 */
   }
-  const settings = structuredClone(DEFAULT_SETTINGS);
-  for (const m of MODES) Object.assign(settings[m], stored.settings?.[m]);
-  return { mode: stored.mode && MODES.includes(stored.mode) ? stored.mode : "tabata", settings };
+  // 예전 버전의 "stopwatch"(준비 + 목표 시간)는 지금의 "timelap"이다.
+  const legacy = stored.settings && !stored.settings.timelap && stored.settings.stopwatch;
+  if (legacy) {
+    stored.settings!.timelap = stored.settings!.stopwatch;
+    delete stored.settings!.stopwatch;
+    if (stored.mode === "stopwatch") stored.mode = "timelap";
+  }
+
+  const settings = structuredClone(DEFAULT_SETTINGS) as Record<Mode, ModeSettings>;
+  for (const m of MODES) {
+    for (const key of Object.keys(settings[m])) {
+      const v = stored.settings?.[m]?.[key];
+      if (typeof v === "number") settings[m][key] = v;
+    }
+  }
+  return {
+    mode: stored.mode && MODES.includes(stored.mode) ? stored.mode : "tabata",
+    settings: settings as AllSettings,
+  };
 }
 
 export function useStoredSettings() {

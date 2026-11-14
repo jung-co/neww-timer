@@ -134,6 +134,13 @@ export function useTimer(phases: Phase[]) {
     rerender();
   }, [stopLoop]);
 
+  const reset = useCallback(() => {
+    stopLoop();
+    releaseWakeLock();
+    engine.current = initialEngine();
+    rerender();
+  }, [stopLoop]);
+
   const toggle = useCallback(() => {
     if (engine.current.status === "running") pause();
     else start();
@@ -159,5 +166,6 @@ export function useTimer(phases: Phase[]) {
     pause,
     toggle,
     skip,
+    reset,
   };
 }

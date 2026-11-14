@@ -3,7 +3,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "운동 타이머",
-  description: "타바타 · 라운드 · 스톱워치 운동 타이머",
+  description: "타바타 · 라운드 · 타임랩 · 스톱워치 운동 타이머",
+  appleWebApp: {
+    capable: true,
+    title: "운동 타이머",
+    statusBarStyle: "default",
+  },
 };
 
 export const viewport: Viewport = {

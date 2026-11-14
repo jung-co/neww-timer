@@ -8,6 +8,7 @@ import {
   buildPhases,
   describePhase,
   fmt,
+  fmtElapsed,
   MODE_NAMES,
   MODES,
   PHASE_LABELS,
@@ -34,8 +35,22 @@ export default function TimerApp() {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const busy = timer.status === "running" || timer.status === "paused";
+  const isStopwatch = mode === "stopwatch";
 
   const view = ((): View => {
+    if (isStopwatch) {
+      const started = timer.status !== "idle";
+      return {
+        bg: started ? "work" : "idle",
+        label: MODE_NAMES.stopwatch + (timer.status === "paused" ? " (일시정지)" : ""),
+        time: fmtElapsed(timer.elapsed),
+        sub: "",
+        next: started ? "" : "시작을 누르면 시간이 올라갑니다",
+        bottom: null,
+        progress: started ? (timer.elapsed % 60) / 60 : 0,
+      };
+    }
+
     if (!phases.length) {
       return {
         bg: "idle",
@@ -54,7 +69,7 @@ export default function TimerApp() {
         bg: "idle",
         label: `${MODE_NAMES[mode]} · 준비 완료`,
         time: fmt(first.countUp ? 0 : first.duration),
-        sub: mode === "stopwatch" ? `목표 ${fmt(settings.stopwatch.target)}` : "",
+        sub: mode === "timelap" ? `목표 ${fmt(settings.timelap.target)}` : "",
         next: `첫 구간: ${PHASE_LABELS[first.type]}`,
         bottom: { label: "총 운동 시간", seconds: totalDuration(phases) },
         progress: 0,
@@ -150,7 +165,14 @@ export default function TimerApp() {
             ))}
           </nav>
 
-          <button type="button" className="icon-btn settings-btn" aria-label="시간 설정" title="시간 설정" onClick={openSettings}>
+          <button
+            type="button"
+            className="icon-btn settings-btn"
+            aria-label="시간 설정"
+            title={isStopwatch ? "스톱워치는 설정할 시간이 없습니다" : "시간 설정"}
+            disabled={isStopwatch}
+            onClick={openSettings}
+          >
             <span>시간 설정</span>
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="13" r="8" />
@@ -162,7 +184,7 @@ export default function TimerApp() {
 
         <main className="timer-area">
           <div className="phase-label">{view.label}</div>
-          <div className="timer">{view.time}</div>
+          <div className={`timer${view.time.length > 5 ? " long" : ""}`}>{view.time}</div>
           <div className="sub-info">{view.sub}</div>
           <div className="next-info">{view.next}</div>
 
@@ -170,9 +192,15 @@ export default function TimerApp() {
             <button type="button" className="main-btn" disabled={!phases.length} onClick={toggle}>
               {startLabel}
             </button>
-            <button type="button" className="ghost-btn" disabled={!busy} onClick={timer.skip}>
-              다음 구간 ▶
-            </button>
+            {isStopwatch ? (
+              <button type="button" className="ghost-btn" disabled={timer.status === "idle"} onClick={timer.reset}>
+                ↺ 리셋
+              </button>
+            ) : (
+              <button type="button" className="ghost-btn" disabled={!busy} onClick={timer.skip}>
+                다음 구간 ▶
+              </button>
+            )}
           </div>
         </main>
 
