@@ -68,6 +68,10 @@ npm run start
 npm run typecheck
 ```
 
+## 배포
+
+Vercel에 배포하는 방법은 [`DEPLOY.md`](./DEPLOY.md)를 참고하세요.
+
 ## 프로젝트 구조
 
 ```
